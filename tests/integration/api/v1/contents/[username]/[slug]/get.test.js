@@ -70,7 +70,7 @@ describe('GET /api/v1/contents/[username]/[slug]', () => {
       expect(responseBody.error_location_code).toEqual('CONTROLLER:CONTENT:GET_HANDLER:SLUG_NOT_FOUND');
     });
 
-    test('Content "root" with "status" set to "published"', async () => {
+    test('Content "root" with "status" set to "published" with TabCoins credit and debit', async () => {
       const defaultUser = await orchestrator.createUser();
       await orchestrator.activateUser(defaultUser);
 
@@ -81,6 +81,9 @@ describe('GET /api/v1/contents/[username]/[slug]', () => {
         status: 'published',
         source_url: 'https://www.tabnews.com.br/',
       });
+
+      await orchestrator.createRate(defaultUserContent, 3);
+      await orchestrator.createRate(defaultUserContent, -1);
 
       const response = await fetch(
         `${orchestrator.webserverUrl}/api/v1/contents/${defaultUser.username}/${defaultUserContent.slug}`
@@ -97,7 +100,9 @@ describe('GET /api/v1/contents/[username]/[slug]', () => {
         title: 'Conteúdo publicamente disponível',
         body: 'Conteúdo relevante deveria estar disponível para todos.',
         status: 'published',
-        tabcoins: 1,
+        tabcoins: 3,
+        tabcoins_credit: 3,
+        tabcoins_debit: -1,
         source_url: 'https://www.tabnews.com.br/',
         created_at: defaultUserContent.created_at.toISOString(),
         updated_at: defaultUserContent.updated_at.toISOString(),
@@ -203,6 +208,8 @@ describe('GET /api/v1/contents/[username]/[slug]', () => {
         body: 'Body with relevant texts needs to contain a good amount of words',
         status: 'published',
         tabcoins: 1,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
         source_url: null,
         created_at: rootContent.created_at.toISOString(),
         updated_at: rootContent.updated_at.toISOString(),
@@ -283,6 +290,8 @@ describe('GET /api/v1/contents/[username]/[slug]', () => {
         body: 'Conteúdo child',
         status: 'published',
         tabcoins: 0,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
         source_url: null,
         created_at: childContent.created_at.toISOString(),
         updated_at: childContent.updated_at.toISOString(),
@@ -351,6 +360,8 @@ describe('GET /api/v1/contents/[username]/[slug]', () => {
         body: 'Conteúdo child',
         status: 'published',
         tabcoins: 0,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
         source_url: null,
         created_at: childContent.created_at.toISOString(),
         updated_at: childContent.updated_at.toISOString(),

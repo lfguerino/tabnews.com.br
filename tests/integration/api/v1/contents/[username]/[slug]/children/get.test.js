@@ -76,7 +76,7 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
       expect(responseBody).toEqual([]);
     });
 
-    test('From "root" content with "published" status with 6 "published" and 1 "draft" children', async () => {
+    test('From "root" content with "published" status with 6 "published" and 1 "draft" children, with TabCoins', async () => {
       const firstUser = await orchestrator.createUser();
       const secondUser = await orchestrator.createUser();
 
@@ -99,6 +99,9 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
         title: 'Child branch A [Level 2]',
         status: 'published',
       });
+
+      await orchestrator.createRate(childBranchALevel2, 2);
+      await orchestrator.createRate(childBranchALevel2, -1);
 
       const childBranchALevel3 = await orchestrator.createContent({
         parent_id: childBranchALevel2.id,
@@ -128,6 +131,9 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
         status: 'published',
       });
 
+      await orchestrator.createRate(childBranchBLevel2Content2, 2);
+      await orchestrator.createRate(childBranchBLevel2Content2, -3);
+
       // childBranchBLevel2Content3
       await orchestrator.createContent({
         parent_id: childBranchBLevel1.id,
@@ -152,6 +158,8 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
           title: childBranchBLevel1.title,
           body: childBranchBLevel1.body,
           tabcoins: 1,
+          tabcoins_credit: 0,
+          tabcoins_debit: 0,
           status: childBranchBLevel1.status,
           source_url: childBranchBLevel1.source_url,
           source_url: childBranchBLevel1.source_url,
@@ -169,6 +177,8 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
               title: childBranchBLevel2Content1.title,
               body: childBranchBLevel2Content1.body,
               tabcoins: 1,
+              tabcoins_credit: 0,
+              tabcoins_debit: 0,
               status: childBranchBLevel2Content1.status,
               source_url: childBranchBLevel2Content1.source_url,
               source_url: childBranchBLevel2Content1.source_url,
@@ -187,7 +197,9 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
               slug: childBranchBLevel2Content2.slug,
               title: childBranchBLevel2Content2.title,
               body: childBranchBLevel2Content2.body,
-              tabcoins: 0,
+              tabcoins: -1,
+              tabcoins_credit: 2,
+              tabcoins_debit: -3,
               status: childBranchBLevel2Content2.status,
               source_url: childBranchBLevel2Content2.source_url,
               source_url: childBranchBLevel2Content2.source_url,
@@ -211,6 +223,8 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
           body: childBranchALevel1.body,
           status: childBranchALevel1.status,
           tabcoins: 1,
+          tabcoins_credit: 0,
+          tabcoins_debit: 0,
           source_url: childBranchALevel1.source_url,
           created_at: childBranchALevel1.created_at.toISOString(),
           updated_at: childBranchALevel1.updated_at.toISOString(),
@@ -226,7 +240,9 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
               title: childBranchALevel2.title,
               body: childBranchALevel2.body,
               status: childBranchALevel2.status,
-              tabcoins: 1,
+              tabcoins: 2,
+              tabcoins_credit: 2,
+              tabcoins_debit: -1,
               source_url: childBranchALevel2.source_url,
               created_at: childBranchALevel2.created_at.toISOString(),
               updated_at: childBranchALevel2.updated_at.toISOString(),
@@ -242,6 +258,8 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
                   title: childBranchALevel3.title,
                   body: childBranchALevel3.body,
                   tabcoins: 1,
+                  tabcoins_credit: 0,
+                  tabcoins_debit: 0,
                   status: childBranchALevel3.status,
                   source_url: childBranchALevel3.source_url,
                   created_at: childBranchALevel3.created_at.toISOString(),
@@ -339,6 +357,8 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
           body: childBranchBLevel2Content2.body,
           status: childBranchBLevel2Content2.status,
           tabcoins: 1,
+          tabcoins_credit: 0,
+          tabcoins_debit: 0,
           source_url: childBranchBLevel2Content2.source_url,
           source_url: childBranchBLevel2Content2.source_url,
           created_at: childBranchBLevel2Content2.created_at.toISOString(),
@@ -358,6 +378,8 @@ describe('GET /api/v1/contents/[username]/[slug]/children', () => {
           body: childBranchBLevel2Content1.body,
           status: childBranchBLevel2Content1.status,
           tabcoins: 0,
+          tabcoins_credit: 0,
+          tabcoins_debit: 0,
           source_url: childBranchBLevel2Content1.source_url,
           source_url: childBranchBLevel2Content1.source_url,
           created_at: childBranchBLevel2Content1.created_at.toISOString(),

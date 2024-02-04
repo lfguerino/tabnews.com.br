@@ -190,7 +190,7 @@ describe('GET /api/v1/contents/[username]/[slug]/parent', () => {
       expect(uuidVersion(responseBody.request_id)).toEqual(4);
     });
 
-    test('From "child" content 1 level deep with "published" status', async () => {
+    test('From "child" content 1 level deep with "published" status, with parent having TabCoins', async () => {
       const firstUser = await orchestrator.createUser();
       const secondUser = await orchestrator.createUser();
 
@@ -208,6 +208,9 @@ describe('GET /api/v1/contents/[username]/[slug]/parent', () => {
         body: 'Child content body Level 1 - relevant content',
         status: 'published',
       });
+
+      await orchestrator.createRate(rootContent, 10);
+      await orchestrator.createRate(rootContent, -11);
 
       const response = await fetch(
         `${orchestrator.webserverUrl}/api/v1/contents/${secondUser.username}/${childContentLevel1.slug}/parent`
@@ -231,7 +234,9 @@ describe('GET /api/v1/contents/[username]/[slug]/parent', () => {
         updated_at: rootContent.updated_at.toISOString(),
         deleted_at: null,
         owner_username: firstUser.username,
-        tabcoins: 1,
+        tabcoins: 0,
+        tabcoins_credit: 10,
+        tabcoins_debit: -11,
       });
     });
 
@@ -293,6 +298,8 @@ describe('GET /api/v1/contents/[username]/[slug]/parent', () => {
         deleted_at: null,
         owner_username: firstUser.username,
         tabcoins: 1,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
       });
     });
 
@@ -358,6 +365,8 @@ describe('GET /api/v1/contents/[username]/[slug]/parent', () => {
         deleted_at: null,
         owner_username: firstUser.username,
         tabcoins: 0,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
       });
     });
 
@@ -424,6 +433,8 @@ describe('GET /api/v1/contents/[username]/[slug]/parent', () => {
         deleted_at: childContentLevel2Deleted.deleted_at.toISOString(),
         owner_username: firstUser.username,
         tabcoins: 1,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
       });
     });
   });

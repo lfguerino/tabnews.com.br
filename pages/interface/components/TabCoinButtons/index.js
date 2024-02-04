@@ -81,6 +81,21 @@ export default function TabCoinButtons({ content }) {
     }
   }
 
+  function getTabCoinsBalanceLabel() {
+    const positive = contentObject.tabcoins_credit;
+    const total = positive + Math.abs(contentObject.tabcoins_debit);
+    const positivePercentage = Math.round((positive / total) * 100);
+
+    if (total === 0) {
+      return `Nenhum voto`;
+    }
+
+    const totalVotesText = total > 1 ? 'votos' : 'voto';
+    const positiveVotesText = positive > 1 ? 'votos positivos' : 'voto positivo';
+
+    return `${positive} ${positiveVotesText} (${positivePercentage}% de ${total} ${totalVotesText})`;
+  }
+
   const isInAction = isPosting || isAnimatingCredit || isAnimatingDebit;
 
   return (
@@ -102,10 +117,12 @@ export default function TabCoinButtons({ content }) {
           disabled={isInAction}
         />
       </Tooltip>
-      <Text sx={{ fontSize: 0, fontWeight: 'bold', py: '4px', color: 'accent.emphasis' }}>
-        <div id={`reward-${contentObject.id}`} style={{ marginLeft: '-10px' }} aria-hidden></div>
-        {contentObject.tabcoins}
-      </Text>
+      <Tooltip aria-label={getTabCoinsBalanceLabel()} direction="ne" sx={{ width: '100%', textAlign: 'center' }}>
+        <Text sx={{ fontSize: 0, fontWeight: 'bold', py: '4px', color: 'accent.emphasis' }}>
+          <div id={`reward-${contentObject.id}`} style={{ marginLeft: '-10px' }} aria-hidden></div>
+          {contentObject.tabcoins}
+        </Text>
+      </Tooltip>
       <Tooltip aria-label="Não achei relevante" direction="ne">
         <IconButton
           variant="invisible"

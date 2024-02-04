@@ -174,6 +174,8 @@ describe('POST /api/v1/contents/tabcoins', () => {
 
       expect(postTabCoinsResponseBody).toStrictEqual({
         tabcoins: 2,
+        tabcoins_credit: 1,
+        tabcoins_debit: 0,
       });
 
       const firstUserResponse = await fetch(`${orchestrator.webserverUrl}/api/v1/users/${firstUser.username}`, {
@@ -240,6 +242,8 @@ describe('POST /api/v1/contents/tabcoins', () => {
 
       expect(postTabCoinsResponseBody).toStrictEqual({
         tabcoins: 0,
+        tabcoins_credit: 0,
+        tabcoins_debit: -1,
       });
 
       const firstUserResponse = await fetch(`${orchestrator.webserverUrl}/api/v1/users/${firstUser.username}`, {
@@ -551,6 +555,8 @@ describe('POST /api/v1/contents/tabcoins', () => {
 
       expect(postTabCoinsResponse1Body).toStrictEqual({
         tabcoins: 0,
+        tabcoins_credit: 0,
+        tabcoins_debit: -1,
       });
 
       const firstUserResponse1 = await fetch(`${orchestrator.webserverUrl}/api/v1/users/${firstUser.username}`, {
@@ -598,6 +604,8 @@ describe('POST /api/v1/contents/tabcoins', () => {
 
       expect(postTabCoinsResponse2Body).toStrictEqual({
         tabcoins: -1,
+        tabcoins_credit: 0,
+        tabcoins_debit: -2,
       });
 
       const firstUserResponse2 = await fetch(`${orchestrator.webserverUrl}/api/v1/users/${firstUser.username}`, {

@@ -232,10 +232,12 @@ describe('GET /api/v1/contents/[username]/[slug]/root', () => {
         deleted_at: null,
         owner_username: firstUser.username,
         tabcoins: 1,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
       });
     });
 
-    test('From "child" content 3 level deep, with all "published"', async () => {
+    test('From "child" content 3 level deep, with all "published" and TabCoins credit and debit', async () => {
       const firstUser = await orchestrator.createUser();
       const secondUser = await orchestrator.createUser();
 
@@ -245,6 +247,9 @@ describe('GET /api/v1/contents/[username]/[slug]/root', () => {
         body: 'Body with relevant texts needs to contain a good amount of words',
         status: 'published',
       });
+
+      await orchestrator.createRate(rootContent, 3);
+      await orchestrator.createRate(rootContent, -2);
 
       const childContentLevel1 = await orchestrator.createContent({
         owner_id: secondUser.id,
@@ -292,7 +297,9 @@ describe('GET /api/v1/contents/[username]/[slug]/root', () => {
         updated_at: rootContent.updated_at.toISOString(),
         deleted_at: null,
         owner_username: firstUser.username,
-        tabcoins: 1,
+        tabcoins: 2,
+        tabcoins_credit: 3,
+        tabcoins_debit: -2,
       });
     });
 
@@ -359,6 +366,8 @@ describe('GET /api/v1/contents/[username]/[slug]/root', () => {
         deleted_at: null,
         owner_username: firstUser.username,
         tabcoins: 1,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
       });
     });
 
@@ -424,6 +433,8 @@ describe('GET /api/v1/contents/[username]/[slug]/root', () => {
         deleted_at: null,
         owner_username: firstUser.username,
         tabcoins: 0,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
         children_deep_count: 0,
       });
     });
@@ -491,6 +502,8 @@ describe('GET /api/v1/contents/[username]/[slug]/root', () => {
         deleted_at: rootContentDeleted.deleted_at.toISOString(),
         owner_username: firstUser.username,
         tabcoins: 1,
+        tabcoins_credit: 0,
+        tabcoins_debit: 0,
         children_deep_count: 0,
       });
     });

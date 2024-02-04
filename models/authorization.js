@@ -242,6 +242,8 @@ function filterOutput(user, feature, output) {
   if (feature === 'read:content:tabcoins') {
     filteredOutputValues = validator(output, {
       tabcoins: 'required',
+      tabcoins_credit: 'required',
+      tabcoins_debit: 'required',
     });
   }
 
